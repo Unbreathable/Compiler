@@ -1,4 +1,4 @@
-## 🖥️ compiler
+## 🖥️ Compiler
 Welcome to compiler. A framework to combine multiple files into one. I know it might seem useless at first, but it is actually way more useful than you think it could be. I recently needed a tool/application to reduce the size of my gigantic html and css file. So I came up with compiler. It allows you to combine multiple files into one file and then reload the output file upon saving the file.
 
 ## 📰 Usage
