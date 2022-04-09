@@ -15,7 +15,7 @@ public class WatchCommand extends Command {
      * Command for watching the input and output file, also other files in the directory if needed
      */
     public WatchCommand() {
-        super(new String[] {"watch", "live-compile"}, "watch", "watch <input: File> <output: File> <toWatch: File...>", "Re-compiles the output file every time the input file changes. (Live-Compiling)");
+        super(new String[] {"watch", "live-compile"}, "watch", "watch <input: File> <output: File>", "Re-compiles the output file every time the input file changes. (Live-Compiling)");
     }
 
     @Override
@@ -24,9 +24,6 @@ public class WatchCommand extends Command {
         // Get template and output file
         File template = new File(args[0]);
         File output = new File(args[1]);
-
-        // Get other files attached
-        ArrayList<String> otherFiles = new ArrayList<>(Arrays.asList(Arrays.copyOfRange(args, 2, args.length)));
 
         // Check if template and output file exist
         if(!CompileManager.checkFiles(template, output)) {
@@ -49,32 +46,23 @@ public class WatchCommand extends Command {
 
                 // Get the watch key
                 final WatchKey wk = watchService.take();
+
+                // Variable for already compiling
+                boolean compiling = false;
+
+                // Go through all events
                 for (WatchEvent<?> event : wk.pollEvents()) {
 
-                    // Get the path of the changed directory
-                    final Path changed = (Path) event.context();
+                    // Check if it has already been recompiled once
+                    if(!compiling) {
 
-                    // Check if any of the other files to watch have changed
-                    for(String file : otherFiles) {
-
-                        // Check if the file changed is the file given in the for loop
-                        if (changed.endsWith(file)) {
-
-                            // Recompile the output file
-                            System.out.println("SUCCESS: Detected modification in template file. Recompiling..");
-                            CompileManager.compile(template, output);
-                            System.out.println("SUCCESS: Compiling finished!");
-                            break;
-                        }
-                    }
-
-                    // Check if the changed file is equal to the template file
-                    if (changed.endsWith(template.getName())) {
-
-                        // Recompile the output file
+                        // Recompile the file
                         System.out.println("SUCCESS: Detected modification in template file. Recompiling..");
                         CompileManager.compile(template, output);
                         System.out.println("SUCCESS: Compiling finished!");
+
+                        // Set compiling state
+                        compiling = true;
                     }
                 }
 

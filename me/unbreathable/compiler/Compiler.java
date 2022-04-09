@@ -11,7 +11,7 @@ public class Compiler {
 
     private static Compiler instance;
 
-    private final String name = "compiler", version = "0.1-SNAPSHOT", author = "Unbreathable";
+    private final String name = "compiler", version = "1.0.1", author = "Unbreathable";
 
     private MethodManager manager;
     private CommandManager commandManager;
