@@ -53,11 +53,17 @@ public class WatchCommand extends Command {
                 // Go through all events
                 for (WatchEvent<?> event : wk.pollEvents()) {
 
+                    // Check if the path is equal to the output file
+                    final Path filePath = (Path) event.context();
+                    if(filePath.endsWith(output.getName())) {
+                        continue;
+                    }
+
                     // Check if it has already been recompiled once
                     if(!compiling) {
 
                         // Recompile the file
-                        System.out.println("SUCCESS: Detected modification in template file. Recompiling..");
+                        System.out.println("SUCCESS: Detected modification in " + filePath.getFileName() + ". Recompiling..");
                         CompileManager.compile(template, output);
                         System.out.println("SUCCESS: Compiling finished!");
 
