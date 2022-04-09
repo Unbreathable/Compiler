@@ -12,7 +12,7 @@ Welcome to compiler. A framework to combine multiple files into one. I know it m
 - help - Help displays a list of all the commands in the application.
 - methods - Methods displays a list of all the methods in the application.
 - compile file1 file2 - Compiles file1 into file2 using methods given in file1. (See usage)
-- watch file1 file2 file... - Does the same thing as the 'compile' command, but also recompiles every time a file is refreshed. file... is a list of files that if changed cause a recompile.
+- watch file1 file2 - Does the same thing as the 'compile' command, but also recompiles every time a file is refreshed.
 
 ## 💻 Methods
 - inject(file) - Replaces the line where the method is located with the content of the file.
