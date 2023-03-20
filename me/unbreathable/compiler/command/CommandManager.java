@@ -1,9 +1,9 @@
 package me.unbreathable.compiler.command;
 
-import me.unbreathable.compiler.command.impl.CompileCommand;
 import me.unbreathable.compiler.command.impl.HelpCommand;
 import me.unbreathable.compiler.command.impl.MethodsCommand;
-import me.unbreathable.compiler.command.impl.WatchCommand;
+import me.unbreathable.compiler.command.impl.StartCommand;
+import me.unbreathable.compiler.command.impl.StopCommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,8 +21,8 @@ public class CommandManager {
         // Add all commands
         commands.add(new HelpCommand());
         commands.add(new MethodsCommand());
-        commands.add(new CompileCommand());
-        commands.add(new WatchCommand());
+        commands.add(new StartCommand());
+        commands.add(new StopCommand());
     }
 
     /**

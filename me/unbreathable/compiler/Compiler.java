@@ -2,6 +2,7 @@ package me.unbreathable.compiler;
 
 import me.unbreathable.compiler.command.CommandManager;
 import me.unbreathable.compiler.methods.MethodManager;
+import me.unbreathable.compiler.watching.WatchManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,9 +12,10 @@ public class Compiler {
 
     private static Compiler instance;
 
-    private final String name = "compiler", version = "1.0.1", author = "Unbreathable";
+    private final String name = "compiler", version = "2.0.0-ALPHA", author = "Unbreathable";
 
     private MethodManager manager;
+    private WatchManager watchManager;
     private CommandManager commandManager;
 
     // Start the base of the program
@@ -34,6 +36,7 @@ public class Compiler {
         // Register the manages
         manager = new MethodManager();
         commandManager = new CommandManager();
+        watchManager = new WatchManager();
 
         // Register the reader that reads the console
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -66,6 +69,10 @@ public class Compiler {
 
     public CommandManager getCommandManager() {
         return commandManager;
+    }
+
+    public WatchManager getWatchManager() {
+        return watchManager;
     }
 
     public static Compiler getInstance() {

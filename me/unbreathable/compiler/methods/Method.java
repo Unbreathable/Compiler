@@ -1,5 +1,7 @@
 package me.unbreathable.compiler.methods;
 
+import java.io.File;
+
 public abstract class Method {
 
     private final String alias, usage, description;
@@ -10,7 +12,7 @@ public abstract class Method {
         this.description = description;
     }
 
-    public abstract MethodResult execute(String[] args);
+    public abstract MethodResult execute(String[] args, File directory);
 
     public String getAlias() {
         return alias;

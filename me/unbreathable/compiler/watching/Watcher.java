@@ -1,34 +1,23 @@
-package me.unbreathable.compiler.command.impl;
+package me.unbreathable.compiler.watching;
 
-import me.unbreathable.compiler.command.Command;
 import me.unbreathable.compiler.methods.CompileManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 
-public class WatchCommand extends Command {
+public class Watcher {
 
-    /**
-     * Command for watching the input and output file, also other files in the directory if needed
-     */
-    public WatchCommand() {
-        super(new String[] {"watch", "live-compile"}, "watch", "watch <input: File> <output: File>", "Re-compiles the output file every time the input file changes. (Live-Compiling)");
-    }
-
-    @Override
-    public void execute(String[] args) {
-
-        // Get template and output file
-        File template = new File(args[0]);
-        File output = new File(args[1]);
+    public static void watch(File template) {
 
         // Check if template and output file exist
-        if(!CompileManager.checkFiles(template, output)) {
+        if (!template.exists()) {
             return;
         }
+
+        // Compile for the first time
+        String output = CompileManager.compile(template);
+        long lastModified = System.currentTimeMillis();
 
         try {
 
@@ -41,7 +30,6 @@ public class WatchCommand extends Command {
             // Add a watch service for the ENTRY_MODIFY event
             path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
 
-            // Just using while(true) here since it should run forever (might make this into a thread in the future)
             while (true) {
 
                 // Get the watch key
@@ -53,22 +41,30 @@ public class WatchCommand extends Command {
                 // Go through all events
                 for (WatchEvent<?> event : wk.pollEvents()) {
 
+                    // Check if enough time has passed
+                    if(System.currentTimeMillis() < lastModified + 1000) {
+                        continue;
+                    }
+
                     // Check if the path is equal to the output file
                     final Path filePath = (Path) event.context();
-                    if(filePath.endsWith(output.getName())) {
+
+                    // Check if it has already been recompiled once
+                    if(filePath.getFileName().toString().equalsIgnoreCase(output)) {
                         continue;
                     }
 
                     // Check if it has already been recompiled once
-                    if(!compiling) {
+                    if (!compiling) {
 
                         // Recompile the file
                         System.out.println("SUCCESS: Detected modification in " + filePath.getFileName() + ". Recompiling..");
-                        CompileManager.compile(template, output);
+                        output = CompileManager.compile(template);
                         System.out.println("SUCCESS: Compiling finished!");
 
                         // Set compiling state
                         compiling = true;
+                        lastModified = System.currentTimeMillis();
                     }
                 }
 
@@ -82,4 +78,5 @@ public class WatchCommand extends Command {
             e.printStackTrace();
         }
     }
+
 }

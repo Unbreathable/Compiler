@@ -16,9 +16,9 @@ public class InjectMethod extends Method {
     }
 
     @Override
-    public MethodResult execute(String[] args) {
+    public MethodResult execute(String[] args, File directory) {
 
-        File target = new File(args[0]);
+        File target = new File(directory, args[0]);
 
         if(!target.exists()) {
             return new MethodResult(target.getAbsolutePath() + " not found.");

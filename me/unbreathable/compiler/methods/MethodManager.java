@@ -3,6 +3,7 @@ package me.unbreathable.compiler.methods;
 import me.unbreathable.compiler.Compiler;
 import me.unbreathable.compiler.methods.impl.InjectMethod;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class MethodManager {
@@ -23,9 +24,10 @@ public class MethodManager {
      * Method for processing a line of text in the template file
      *
      * @param query The line of text
+     * @param directory The directory of the template file
      * @return The result
      */
-    public MethodResult execute(String query) {
+    public MethodResult execute(String query, File directory) {
 
         // Check if the query contains the name tag
         if(query.contains("@" + Compiler.getInstance().getName())) {
@@ -55,7 +57,7 @@ public class MethodManager {
                         commandArgs = commandArgs[0].split(",");
 
                         // Execute the command
-                        return method.execute(commandArgs);
+                        return method.execute(commandArgs, directory);
                     }
                 }
             }
