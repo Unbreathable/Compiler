@@ -1,0 +1,6 @@
+@output gen.txt
+
+Hi, to explain compiler, this is a template, as you can tell from the @output header in the first line of this file.
+The thing below is what I call a method, for now there's only inject, but what this will do, is take all the content from the buch.txt file and paste it in there.
+
+@compiler:inject(file.txt)

@@ -1,0 +1,4 @@
+
+Alright, this file is in another directory, but if you type "start <director>", compiler will also look for subdirectories to watch to make sure everything is working, I added this template.
+
+As you can see this works across multiple directories.
