@@ -7,7 +7,7 @@ For the usage, I provided an example in the example directory of this repository
 ### Commands
 - **help** Help displays a list of all the commands in the application.
 - **methods** Methods displays a list of all the methods in the application.
-- **start <directory>** Start scans the specified directory for templates, compiles them and watches for changes.
+- **start [directory]** Start scans the specified directory for templates, compiles them and watches for changes.
 - **stop** Stop stops all the threads that are currently watching for file changes.
 
 ### Methods
