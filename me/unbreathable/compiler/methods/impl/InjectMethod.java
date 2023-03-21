@@ -26,4 +26,9 @@ public class InjectMethod extends Method {
 
         return new MethodResult("Injected text.", FileUtil.readContent(target));
     }
+
+    @Override
+    public MethodResult toWatch(String[] args, File directory) {
+        return new MethodResult(new File(directory, args[0]).getParentFile());
+    }
 }

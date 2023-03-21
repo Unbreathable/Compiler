@@ -27,7 +27,7 @@ public class MethodManager {
      * @param directory The directory of the template file
      * @return The result
      */
-    public MethodResult execute(String query, File directory) {
+    public MethodResult execute(boolean watch, String query, File directory) {
 
         // Check if the query contains the name tag
         if(query.contains("@" + Compiler.getInstance().getName())) {
@@ -57,7 +57,7 @@ public class MethodManager {
                         commandArgs = commandArgs[0].split(",");
 
                         // Execute the command
-                        return method.execute(commandArgs, directory);
+                        return watch ? method.toWatch(commandArgs, directory) : method.execute(commandArgs, directory);
                     }
                 }
             }
@@ -67,7 +67,7 @@ public class MethodManager {
         }
 
         // Return nothing
-        return new MethodResult(null);
+        return new MethodResult("");
     }
 
     public ArrayList<Method> getMethods() {

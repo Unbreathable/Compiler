@@ -10,17 +10,21 @@ import java.util.ArrayList;
 
 public class CompileManager {
 
+    public static String compile(boolean watch, File template) {
+        return compile(watch, template, "");
+    }
+
     /**
      * The heart of the program: This method recompiles the template file
      * and overwrites the output file using the methods in the file itself.
      *
      * @param template Template file
      */
-    public static String compile(File template) {
+    public static String compile(boolean watch, File template, String prefix) {
 
         // Check if both files exist
         if(!template.exists()) {
-            System.out.println("ERROR: The specified template file does not exist!");
+            System.out.println(prefix + "The specified template file does not exist!");
             return "";
         }
 
@@ -44,24 +48,39 @@ public class CompileManager {
 
         // Content to be written into the new file
         ArrayList<String> newContent = new ArrayList<>();
+        StringBuilder directories = new StringBuilder();
 
         // Compile the file
         int count = 0;
         for(String query : content) {
             count++;
 
-            MethodResult result = Compiler.getInstance().getManager().execute(query, template.getParentFile());
-            if(result.getMessage() == null) {
+            MethodResult result = Compiler.getInstance().getManager().execute(watch, query, template.getParentFile());
+
+            // Check if the result is a watchable directory
+            if(result.isWatch()) {
+                if(result.getMessage().equals(template.getParent())) {
+                    continue;
+                }
+
+                directories.append(result.getMessage()).append(";");
+                continue;
+            }
+
+            // Return on watching mode
+            if(watch) continue;
+
+            if(result.getMessage().isEmpty()) {
                 newContent.add(query);
                 continue;
             }
 
             if(!result.wasSuccessful()) {
-                System.out.println("ERROR: Line " + count + ": " + result.getMessage());
+                System.out.println(prefix + "ERROR: Line " + count + ": " + result.getMessage());
                 return "";
             }
 
-            System.out.println("SUCCESS: Compiled line " + count + "!");
+            System.out.println(prefix + "SUCCESS: Compiled line " + count + "!");
             newContent.addAll(result.getContent());
 
         }
@@ -69,7 +88,7 @@ public class CompileManager {
         // Write new file
         FileUtil.writeContent(output, newContent);
 
-        return output.getName();
+        return watch ? directories.isEmpty() ? "" : directories.substring(0, directories.length()-1) : output.getName();
     }
 
     /**

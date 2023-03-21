@@ -8,43 +8,36 @@ import java.nio.file.*;
 
 public class Watcher {
 
-    public static void watch(File template) {
+    public static void watch(String output, File template, File directory) {
 
         // Check if template and output file exist
         if (!template.exists()) {
             return;
         }
 
-        // Compile for the first time
-        String output = CompileManager.compile(template);
-        long lastModified = System.currentTimeMillis();
-
         try {
 
             // Get the path of the template file
-            final Path path = FileSystems.getDefault().getPath(template.getAbsolutePath().replace(template.getName(), ""));
+            final Path path = FileSystems.getDefault().getPath(directory.getPath());
 
             // Create a new watch service
             final WatchService watchService = FileSystems.getDefault().newWatchService();
 
             // Add a watch service for the ENTRY_MODIFY event
             path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
+            String prefix = "[" + template.getName() + "] ";
+
+            // Get the watch key
+            final WatchKey wk = watchService.take();
+            long lastModified = System.currentTimeMillis();
 
             while (true) {
-
-                // Get the watch key
-                final WatchKey wk = watchService.take();
 
                 // Variable for already compiling
                 boolean compiling = false;
 
                 // Go through all events
                 for (WatchEvent<?> event : wk.pollEvents()) {
-
-                    // Check if enough time has passed
-                    if(System.currentTimeMillis() < lastModified + 1000) {
-                        continue;
-                    }
 
                     // Check if the path is equal to the output file
                     final Path filePath = (Path) event.context();
@@ -54,13 +47,18 @@ public class Watcher {
                         continue;
                     }
 
+                    // Check if the file has been modified recently
+                    if(System.currentTimeMillis() - lastModified < 1000) {
+                        continue;
+                    }
+
                     // Check if it has already been recompiled once
                     if (!compiling) {
 
                         // Recompile the file
-                        System.out.println("SUCCESS: Detected modification in " + filePath.getFileName() + ". Recompiling..");
-                        output = CompileManager.compile(template);
-                        System.out.println("SUCCESS: Compiling finished!");
+                        System.out.println(prefix + "Detected modification in " + filePath.getFileName() + ". Recompiling..");
+                        output = CompileManager.compile(false, template, prefix);
+                        System.out.println(prefix + "Compiling finished!");
 
                         // Set compiling state
                         compiling = true;

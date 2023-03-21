@@ -13,6 +13,7 @@ public abstract class Method {
     }
 
     public abstract MethodResult execute(String[] args, File directory);
+    public abstract MethodResult toWatch(String[] args, File directory);
 
     public String getAlias() {
         return alias;

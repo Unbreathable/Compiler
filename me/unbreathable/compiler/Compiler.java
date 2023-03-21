@@ -12,7 +12,7 @@ public class Compiler {
 
     private static Compiler instance;
 
-    private final String name = "compiler", version = "2.0.0-ALPHA", author = "Unbreathable";
+    private final String name = "compiler", version = "2.0.1", author = "Unbreathable";
 
     private MethodManager manager;
     private WatchManager watchManager;
