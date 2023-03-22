@@ -5,14 +5,16 @@ import me.unbreathable.compiler.methods.MethodManager;
 import me.unbreathable.compiler.watching.WatchManager;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Compiler {
 
     private static Compiler instance;
+    public static File origin;
 
-    private final String name = "compiler", version = "2.0.1", author = "Unbreathable";
+    private final String name = "compiler", version = "2.0.2", author = "Unbreathable";
 
     private MethodManager manager;
     private WatchManager watchManager;

@@ -30,6 +30,9 @@ public class StartCommand extends Command {
             return;
         }
 
+        // Set the origin directory
+        Compiler.origin = file;
+
         // Scan the directory for files
         scanDirectory(file);
 
